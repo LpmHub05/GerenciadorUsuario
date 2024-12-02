@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <link rel="stylesheet" href="resources/css/css.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="left-header">
+                <a href="gerenciador.html">usuarios</a>
+                <a v-if="userdata.admin === 1 || userdata.cargo === 'vendedor'" href="produto.html">produtos</a>
+                <a href="#">sair</a>
+            </div>
+            <div class="right-header">{{userdata.nome}}</div>
+        </header>
+
+        <main>
+            <details class="list">
+                <summary>Produtos</summary>
+                <table class="table">
+                    <tr class="list-table">
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th v-if="userdata.admin === 1 || userdata.cargo === 'vendedor'">Ações</th>
+                    </tr>
+                    <tr v-for="produto in produtos" :key="produto.id">
+                        <td>{{ produto.nome }}</td>
+                        <td>{{ produto.preco}}</td>
+                        <td class="td-actions" v-if="userdata.admin === 1 || userdata.cargo === 'vendedor'">
+                            <button class="edit" @click="abrirModal(produto)">Editar</button>
+                            <button class="delete" @click="deletar(produto.id)">Deletar</button>
+                        </td>
+                    </tr>
+                </table>
+            </details>
+        </main>
+
+        <div v-if="modalAberto" class="modal">
+            <div class="modal-content">
+                <span class="close" @click="fecharModal">&times;</span>
+                <h2>Editar Produto</h2>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" v-model="produtoEditando.nome">
+                <label for="preco">Preço:</label>
+                <input type="number" id="preco" v-model="produtoEditando.preco">
+                <button @click="salvarAlteracoes">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="resources/vue/vue2.js"></script>
+</body>
+</html>
